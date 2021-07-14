@@ -1,0 +1,17 @@
+﻿@{
+    switch (Market.Models.Role.ActiveUserRole) {
+        case Market.Models.RolesEnum.SuperAdmin:
+            Layout = "_LayoutSuperAdmin";
+            break;
+        case Market.Models.RolesEnum.MarketAdmin:
+            Layout = "_LayoutMarketAdmin";
+            break;
+        case Market.Models.RolesEnum.Manager:
+            Layout = "Manager_Layout";
+            break;
+        case Market.Models.RolesEnum.User:
+            Layout = "_LayoutUser";
+            break;
+    }
+
+}

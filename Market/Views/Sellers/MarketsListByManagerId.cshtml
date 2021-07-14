@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Market.Models.UsersRole>
+
+@{
+    ViewData["Title"] = "Market-List";
+}
+
+<h1>Market list</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Seller.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seller.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Seller.Image)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seller.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seller.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seller.Image)
+            </td>
+            <td>
+                <a asp-action="ItemsListBySellerId" asp-controller="Items" asp-route-id="@item.SellerId">Manage</a> 
+                <a asp-action="Edit" asp-route-id="@item.Seller.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Seller.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Seller.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
