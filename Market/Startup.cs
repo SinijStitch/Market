@@ -28,6 +28,7 @@ namespace Market
 
 
             services.AddControllersWithViews();
+            services.AddControllers();
 
             services.AddDbContext<MarketContext>(
                 options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
