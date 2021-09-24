@@ -33,6 +33,8 @@ namespace Market.Controllers
         {
             SellersController.ActiveSeller = _context.Sellers.Find(id);
             var marketContext = _context.Items.Include(i => i.Manufacturer).Include(i => i.Seller).Where(i => i.SellerId ==id);
+            RouteDispatcher.PreviousPage = "ItemsListBySellerId";
+            RouteDispatcher.Id = (int)id;
             return View(await marketContext.ToListAsync());
         }
 
@@ -80,6 +82,9 @@ namespace Market.Controllers
 
                 _context.Add(item);
                 await _context.SaveChangesAsync();
+
+
+                RouteDispatcher.GoPrevious();
                 return RedirectToAction(nameof(Index));
             }
             return View(item);

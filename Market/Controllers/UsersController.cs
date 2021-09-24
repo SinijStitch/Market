@@ -52,6 +52,28 @@ namespace Market.Controllers
 
             return View(user);
         }
+
+
+        public async Task<IActionResult> ManagerDetails(int? id)
+        {
+
+
+            if (id == null)
+            {
+
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            RouteDispatcher.PreviousPage = "ManagerDetails";
+            return View(user);
+        }
+
         public async Task<IActionResult> SuperAdminCabinet(int? id)
         {
             if (id == null)
@@ -87,7 +109,7 @@ namespace Market.Controllers
                 return NotFound();
             }
             // ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", usersRole.SellerId);
-            ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", 1);
+            //ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", 1);
             return View(user);
         }
 
@@ -157,7 +179,8 @@ namespace Market.Controllers
                     {
                         Models.Role.ActiveUserRole = RolesEnum.MarketAdmin;
                         // ActiveSeloler
-                        return RedirectToAction("MarketManagerCabinet", new { id = ActiveUser.Id });
+                        //return RedirectToAction("MarketManagerCabinet", new { id = ActiveUser.Id });
+                        return RedirectToAction("ManagerDetails", new { id = ActiveUser.Id });
                     }
                 }
                 return RedirectToAction("Details", new { id = ActiveUser.Id });
@@ -217,6 +240,7 @@ namespace Market.Controllers
                         throw;
                     }
                 }
+              
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
