@@ -79,13 +79,13 @@ namespace Market.Controllers
             {
                 item.Image = Media.Image;
                 item.SellerId = SellersController.ActiveSeller.Id;
-
+                
                 _context.Add(item);
                 await _context.SaveChangesAsync();
 
 
-                RouteDispatcher.GoPrevious();
-                return RedirectToAction(nameof(Index));
+                
+                return RedirectToAction(RouteDispatcher.PreviousPage, new {id = RouteDispatcher.Id });
             }
             return View(item);
         }
@@ -143,7 +143,7 @@ namespace Market.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(RouteDispatcher.PreviousPage, new { id = RouteDispatcher.Id });
             }
             ViewData["ManufacturerId"] = new SelectList(_context.Manufacturers, "Id", "Name", item.ManufacturerId);
             ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", item.SellerId);

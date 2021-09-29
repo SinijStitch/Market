@@ -240,8 +240,8 @@ namespace Market.Controllers
                         throw;
                     }
                 }
-              
-                return RedirectToAction(nameof(Index));
+                
+                return RedirectToAction(RouteDispatcher.PreviousPage, new { id = id });
             }
             return View(user);
         }

@@ -28,6 +28,8 @@ namespace Market.Controllers
         {
 
             var marketContext = _context.CategoriesItems.Include(c => c.Category).Include(c => c.Item).Where(c => c.ItemId == id);
+            RouteDispatcher.Id = (int)id;
+            RouteDispatcher.PreviousPage = "CategoriesListByItemId"; 
             return View(await marketContext.ToListAsync());
         }
 
@@ -160,7 +162,7 @@ namespace Market.Controllers
             var categoriesItem = await _context.CategoriesItems.FindAsync(id);
             _context.CategoriesItems.Remove(categoriesItem);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(RouteDispatcher.PreviousPage, new { id = id });
         }
 
         private bool CategoriesItemExists(int id)
