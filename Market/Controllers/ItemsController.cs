@@ -54,7 +54,7 @@ namespace Market.Controllers
             {
                 return NotFound();
             }
-
+            Media.Init("Items", "Edit", item.Id, item.Image);
             return View(item);
         }
 
@@ -81,10 +81,15 @@ namespace Market.Controllers
                 item.SellerId = SellersController.ActiveSeller.Id;
                 
                 _context.Add(item);
+
                 await _context.SaveChangesAsync();
 
+                CategoriesItem catItem = new CategoriesItem();
+                catItem.CategoryId = 1;
+                catItem.ItemId = _context.Items.OrderBy(m=>m.Id).Last().Id;
+                _context.Add(catItem);
+                await _context.SaveChangesAsync();
 
-                
                 return RedirectToAction(RouteDispatcher.PreviousPage, new {id = RouteDispatcher.Id });
             }
             return View(item);
@@ -166,7 +171,7 @@ namespace Market.Controllers
             {
                 return NotFound();
             }
-
+            Media.Init("Items", "Edit", item.Id, item.Image);
             return View(item);
         }
 

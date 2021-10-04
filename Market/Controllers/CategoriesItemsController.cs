@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Market.Models;
+using Lib;
 
 namespace Market.Controllers
 {
@@ -28,8 +29,12 @@ namespace Market.Controllers
         {
 
             var marketContext = _context.CategoriesItems.Include(c => c.Category).Include(c => c.Item).Where(c => c.ItemId == id);
+
+            var item = await _context.Items.FindAsync(id);  
             RouteDispatcher.Id = (int)id;
-            RouteDispatcher.PreviousPage = "CategoriesListByItemId"; 
+            RouteDispatcher.PreviousPage = "CategoriesListByItemId";
+
+            Media.Init("Items", "Edit", item.Id, item.Image);
             return View(await marketContext.ToListAsync());
         }
 
@@ -146,6 +151,8 @@ namespace Market.Controllers
                 .Include(c => c.Category)
                 .Include(c => c.Item)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+          
             if (categoriesItem == null)
             {
                 return NotFound();

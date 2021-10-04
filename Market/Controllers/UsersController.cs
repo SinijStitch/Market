@@ -127,6 +127,11 @@ namespace Market.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Surname,Password,Login,Mail")] User user)
         {
+
+            if (ActiveUser == null)
+            {
+
+            }
             if (ModelState.IsValid)
             {
                 user.Image = Media.Image;
