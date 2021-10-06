@@ -24,9 +24,16 @@ namespace Market.Controllers
         {
             if (Models.Role.ActiveUserRole != Models.RolesEnum.SuperAdmin)
             {
-                return RedirectToAction( "MessageBox", "Home",new {msg="405"},null);
+                return RedirectToAction("MessageBox", "Home", new { msg = "405" }, null);
             }
-            
+
+            return View(await _context.Sellers.ToListAsync());
+        }
+
+        public async Task<IActionResult> ShopsForUser()
+        {
+           
+
             return View(await _context.Sellers.ToListAsync());
         }
 

@@ -10,6 +10,7 @@ namespace Market.Models
         SuperAdmin = 1,
         MarketAdmin,
         Manager,
-        User
+        User,
+        LoginedUser
     }
 }

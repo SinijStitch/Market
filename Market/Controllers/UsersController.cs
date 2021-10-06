@@ -113,6 +113,27 @@ namespace Market.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> UserCabinet(int? id)
+        {
+            if (id == null)
+            {
+
+                return NotFound();
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            //var marketContext = _context.UsersRoles.Include(u => u.Role).Include(u => u.User).Include(u => u.Seller);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            // ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", usersRole.SellerId);
+            //ViewData["SellerId"] = new SelectList(_context.Sellers, "Id", "Name", 1);
+            return View(user);
+        }
         // GET: Users/Create
         public IActionResult Create()
         {
@@ -128,15 +149,30 @@ namespace Market.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Surname,Password,Login,Mail")] User user)
         {
 
-            if (ActiveUser == null)
-            {
-
-            }
+           
             if (ModelState.IsValid)
             {
                 user.Image = Media.Image;
                 _context.Add(user);
+               
                 await _context.SaveChangesAsync();
+
+                if (ActiveUser == null)
+                {
+                    ActiveUser = _context.Users.OrderBy(u=>u.Id).Last();
+                    UsersRole newUser = new UsersRole();
+                    newUser.UserId = ActiveUser.Id;
+                    newUser.RoleId = (int)Models.RolesEnum.User;
+
+                    _context.Add(newUser);
+                    await _context.SaveChangesAsync();
+
+                    Market.Models.Role.ActiveUserRole = RolesEnum.LoginedUser;
+                    
+                    return RedirectToAction("UserCabinet", new { id = newUser.Id});
+
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -187,6 +223,13 @@ namespace Market.Controllers
                         //return RedirectToAction("MarketManagerCabinet", new { id = ActiveUser.Id });
                         return RedirectToAction("ManagerDetails", new { id = ActiveUser.Id });
                     }
+                    if (ur.UserId == ActiveUser.Id && ur.RoleId == (int)Models.RolesEnum.User)
+                    {
+                        Models.Role.ActiveUserRole = RolesEnum.LoginedUser;
+                        return RedirectToAction("UserCabinet", new { id = ActiveUser.Id });
+                    }
+
+
                 }
                 return RedirectToAction("Details", new { id = ActiveUser.Id });
 
